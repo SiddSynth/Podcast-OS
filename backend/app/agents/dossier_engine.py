@@ -18,9 +18,9 @@ class DossierEngine:
         if "elon" in nl or "musk" in nl:
             return self._elon_musk_dossier()
 
-        # 3. Ratan Tata
-        if "ratan" in nl and "tata" in nl:
-            return self._ratan_tata_dossier()
+        # 3. Jensen Huang
+        if "jensen" in nl or "huang" in nl or "nvidia" in nl:
+            return self._jensen_huang_dossier()
 
         # 4. Sam Altman
         if "altman" in nl or "sam altman" in nl:
@@ -313,120 +313,121 @@ class DossierEngine:
         }
 
     # =========================================================================
-    # CURATED DOSSIER: RATAN TATA (Tata Group, Philanthropy)
+    # CURATED DOSSIER: JENSEN HUANG (NVIDIA, Accelerated Computing & AI)
     # =========================================================================
-    def _ratan_tata_dossier(self) -> Dict[str, Any]:
+    def _jensen_huang_dossier(self) -> Dict[str, Any]:
         return {
-            "summary": "Ratan Naval Tata (1937–2024) was an iconic Indian industrialist, philanthropist, and former chairman of Tata Sons and the Tata Group. Over his two-decade tenure as chairman (1991–2012), he transformed a loose domestic conglomerate into a global powerhouse, orchestrating landmark international acquisitions including Tetley, Corus Steel, and Jaguar Land Rover. Renowned for uncompromising corporate ethics, national industrial vision, and pledging the vast majority of his wealth to philanthropic trusts supporting healthcare, education, and rural development.",
-            "biography": "Born into the illustrious Tata family in Mumbai, Ratan Tata earned a degree in architecture from Cornell University before joining Tata Steel in Jamshedpur in 1961, working on the shop floor shoveling coal alongside laborers. In 1991, J.R.D. Tata passed the baton of Tata Sons to Ratan during India's economic liberalization. Tata consolidated family control, instituted mandatory retirement ages for entrenched satraps, and globalized the enterprise. Under his stewardship, Tata Group revenues grew over 40-fold. He conceptualized the Tata Nano to offer safe, affordable motorized mobility to middle-class Indian families. Over 65% of Tata Sons' equity is owned by philanthropic trusts, meaning the majority of group dividends fund public healthcare, cancer research hospitals, and universities.",
+            "summary": "Jen-Hsun 'Jensen' Huang is a visionary Taiwanese-American electrical engineer, entrepreneur, and co-founder/CEO of NVIDIA. Since founding NVIDIA in 1993, he orchestrated its transformation from a 3D gaming graphics startup into the undisputed compute backbone of the global Artificial Intelligence revolution. Under his three-decade leadership, NVIDIA invented the GPU, engineered the CUDA parallel computing ecosystem, and built the world's most valuable company, surpassing a $3 trillion market cap.",
+            "biography": "Born in Tainan, Taiwan, Jensen Huang immigrated to the United States as a child, working as a teenage dishwasher at Denny's before earning an electrical engineering degree from Oregon State University and a master's from Stanford. In 1993, at a Denny's diner in San Jose with Chris Malachowsky and Curtis Priem, they founded NVIDIA with $40,000 to pioneer 3D graphics for PC gaming. In 2006, Huang made the fateful, high-risk bet on CUDA—spending billions annually to turn every GPU into a general-purpose supercomputer. When AlexNet achieved breakthrough computer vision in 2012 using two GeForce cards, Huang bet the entire company on deep learning. Renowned for his trademark black leather jacket, zero-billion-dollar market vision, flat organizational hierarchy with 50+ direct reports, and relentless corporate paranoia, Huang is considered one of history's greatest technology CEOs.",
             "career_timeline": [
-                {"year": "1962", "event": "Joined Tata Steel in Jamshedpur, beginning on the factory floor."},
-                {"year": "1991", "event": "Appointed Chairman of Tata Sons, succeeding the legendary J.R.D. Tata during India's economic opening."},
-                {"year": "1998", "event": "Launched Tata Indica, India's first indigenously designed and manufactured passenger car."},
-                {"year": "2000", "event": "Acquired British tea giant Tetley for $431M, signaling Tata's aggressive global expansion."},
-                {"year": "2008", "event": "Acquired Jaguar Land Rover from Ford for $2.3B, turning the luxury automaker profitable; unveiled Tata Nano."},
-                {"year": "2012", "event": "Stepped down as Chairman of Tata Sons, dedicating his focus to Tata Trusts and mentoring startup founders."}
+                {"year": "1993", "event": "Co-founded NVIDIA at a Denny's diner in San Jose with $40,000 in capital."},
+                {"year": "1999", "event": "Invented the GPU (GeForce 256) and completed NVIDIA's initial public offering on NASDAQ."},
+                {"year": "2006", "event": "Launched CUDA architecture, investing hundreds of millions annually despite Wall Street skepticism."},
+                {"year": "2012", "event": "AlexNet won ImageNet using NVIDIA GPUs, proving the viability of deep learning on accelerated hardware."},
+                {"year": "2016", "event": "Personally delivered the first DGX-1 AI supercomputer to Sam Altman and Elon Musk at OpenAI."},
+                {"year": "2024", "event": "NVIDIA became the world's most valuable public company, exceeding $3.3 trillion in market valuation."}
             ],
             "funding_investments": [
-                {"year": "2000", "company": "Tetley Tea", "role": "Chairman", "amount": "$431M global acquisition"},
-                {"year": "2007", "company": "Corus Group", "role": "Chairman", "amount": "$12B European steel acquisition"},
-                {"year": "2008", "company": "Jaguar Land Rover", "role": "Chairman", "amount": "$2.3B acquisition from Ford Motors"},
-                {"year": "2015", "company": "Indian Startup Ecosystem (RNT Capital)", "role": "Angel Investor", "amount": "Over 40+ early-stage investments in Ola, Paytm, Lenskart, Urban Company"}
+                {"year": "1993", "company": "NVIDIA Seed Round", "role": "Co-founder", "amount": "$2.2M led by Sutter Hill Ventures"},
+                {"year": "2019", "company": "Mellanox Technologies", "role": "CEO", "amount": "$6.9B acquisition to dominate data center interconnects"},
+                {"year": "2020", "company": "Arm Limited (Attempted)", "role": "CEO", "amount": "$40B proposed acquisition (terminated over regulatory hurdles)"},
+                {"year": "2023-2024", "company": "AI Ecosystem Capital", "role": "Strategic Investor", "amount": "Multi-billion investments into OpenAI, Cohere, Mistral AI, Wayve, and Hugging Face"}
             ],
             "recent_news": [
-                "Revered globally as the benchmark of compassionate capitalism and institutional integrity following his passing in October 2024.",
-                "Tata Trusts expanded world-class cancer hospital networks across northeast India to provide free oncology care.",
-                "Tata Group's acquisition of Air India and entry into semiconductor fabrication honoring his vision of sovereign Indian industry."
+                "Unveiled the Blackwell B200 GPU architecture, offering up to 30x inference performance improvements for trillion-parameter AI models.",
+                "Engineered sovereign AI partnerships with governments worldwide, building sovereign AI clusters across Japan, France, and India.",
+                "NVIDIA crossed $3.3 trillion valuation, driving record data center revenues across global hyperscalers."
             ],
-            "social_media_presence": "Maintained an authentic, compassionate presence on Instagram and X with millions of followers, championing animal welfare, young innovators, and national unity.",
-            "competitors_industry": "Diversified Conglomerate (Steel, Automotive, IT Services, Hospitality, Aviation). Competed with global conglomerates and domestic industrial peers.",
+            "social_media_presence": "Maintains an iconic, rockstar-level presence at keynote addresses (GTC, Computex, SIGGRAPH) and tech forums globally, drawing arena-sized crowds and widespread viral acclaim.",
+            "competitors_industry": "Semiconductor & AI Infrastructure (Accelerated Computing, Networking, AI Software). Competes with AMD, Intel, and hyperscaler custom silicon (Google TPU, AWS Trainium, Meta MTIA).",
             "interesting_stories": [
-                "In 1999, Ford executives humiliated Ratan Tata in Detroit, saying 'you know nothing about cars, why did you enter passenger vehicles? We are doing you a favor by buying your car division.' Nine years later in 2008, Tata bought Jaguar Land Rover from Ford, with Bill Ford publicly thanking Tata for saving the brand.",
-                "Personally visited the families of all 80 victims of the 26/11 Mumbai terror attacks at the Taj Hotel, ensuring complete lifetime salaries, education, and medical care for the families.",
-                "Insisted on living in a modest seafront bungalow in Colaba with his pet dogs rather than an opulent skyscraper mansion."
+                "Worked as a dishwasher and busboy at Denny's as a teenager, which he credits for instilling intense humility, extreme work ethic, and efficiency.",
+                "In 2012, after seeing AlexNet results, Huang redirected NVIDIA's entire multi-billion-dollar R&D apparatus toward deep learning, pivoting before the rest of the tech industry understood AI.",
+                "Manages NVIDIA with a radically flat hierarchy: over 50 direct reports, no 1-on-1 meetings, and transparent group-wide communication.",
+                "Has a tattoo of the NVIDIA logo on his upper arm, inked after the stock hit $100."
             ],
             "future_trends": [
-                "Compassionate Capitalism: Building enterprises where community welfare precedes shareholder maximization.",
-                "Indigenous Deep-Tech: Establishing domestic semiconductor fabrication and defense manufacturing in India.",
-                "Accessible Oncology Care: Democratizing cancer diagnostics and therapy across underserved rural districts."
+                "Physical AI & Robotics: Building foundational simulation engines (Omniverse) for humanoid robots and autonomous factories.",
+                "Sovereign AI Infrastructure: Every nation establishing sovereign data centers to protect and cultivate national culture and intelligence.",
+                "Liquid-Cooled AI Superclusters: Transitioning data centers into automated AI gigawatt power plants."
             ],
             "fast_facts": [
-                "Grew Tata Group revenues over 40x and profits over 50x during his 21-year chairmanship.",
-                "Conducted Cornell University architecture degree; licensed pilot who personally flew F-16 and F/A-18 fighter jets.",
-                "Recipient of India's second-highest civilian honor, the Padma Vibhushan (2008).",
-                "Over 65% of Tata Sons' equity is owned by charitable trusts."
+                "Longest-tenured founder-CEO of any major tech company in Silicon Valley history (30+ consecutive years).",
+                "Holds over 50 direct reports with zero formal 1-on-1 reviews, practicing open real-time group feedback.",
+                "TIME 100 Most Influential People and Financial Times Person of the Year.",
+                "NVIDIA Blackwell chips consume 25x less energy per token compared to Hopper architecture."
             ],
-            "podcast_brief": "Focus on moral stewardship: how to maintain uncompromising ethical standards across a $100B conglomerate, the redemption of Jaguar Land Rover, why giving back to society must be built into corporate charters, and mentoring the next generation of founders.",
+            "podcast_brief": "Focus on the thirty-year journey of conviction: betting NVIDIA on CUDA when Wall Street punished the stock, why accelerated computing is replacing traditional CPUs, how Jensen runs a company with 50 direct reports and no 1-on-1s, the emergence of physical AI/humanoids, and his relentless paranoia of being thirty days from going out of business.",
             "questions": [
                 {"category": "Ice Breakers", "questions": [
-                    "You trained as an architect at Cornell and loved flying fighter jets. How did an architect's eye for spatial harmony shape how you designed corporate structures?",
-                    "When you walked through the Tata Steel factory floor in Jamshedpur in 1962 covered in soot, what was the most valuable lesson you learned from the laborers?",
-                    "What was the single happiest moment of your life that had nothing to do with corporate boardrooms or revenue?",
-                    "Your deep love for dogs is legendary across Bombay House. What has spending time with dogs taught you about human nature and loyalty?",
-                    "What is one principle from J.R.D. Tata that stayed with you throughout your darkest professional crises?"
+                    "You've worn the iconic black leather jacket for over a decade. Does having a singular uniform free up cognitive bandwidth, or has it just become your armor?",
+                    "You started as a dishwasher and busboy at Denny's in Oregon. What is the single hardest lesson from washing dishes that applies to running a $3 trillion chip empire?",
+                    "You famously got the NVIDIA logo tattooed on your arm when the stock hit $100. Are there any plans for a second tattoo now that you're past $3 trillion?",
+                    "If you couldn't work in semiconductors or software, what craft or profession would Jensen Huang dedicate his life to?",
+                    "What is the single most misunderstood thing about parallel computing that most tech executives get wrong?"
                 ]},
                 {"category": "Career & Origins", "questions": [
-                    "In 1991, when J.R.D. Tata chose you as his successor, powerful satraps running individual Tata companies openly rebelled. How did you assert control without destroying the fabric of the group?",
-                    "When you launched the Tata Indica in 1998, Indian consumers were skeptical of an indigenous car. What was the engineering courage required to take on global giants?",
-                    "Tell us the raw, unvarnished story of your 1999 meeting in Detroit with Bill Ford and how it felt to return nine years later to buy Jaguar Land Rover.",
-                    "The Tata Nano was a revolutionary engineering achievement that struggled with consumer brand perception. Looking back, what is the marketing lesson you took from that journey?",
-                    "What was the hardest business decision you ever had to make where ethics compelled you to walk away from massive profit?"
+                    "Take us back to the Denny's booth in 1993 with Chris Malachowsky and Curtis Priem. What made three engineers believe they could take on established semiconductor giants with only $40,000?",
+                    "In 1995, NVIDIA's first chip, NV1, was a commercial failure and the company was weeks away from payroll bankruptcy. How did you survive that first brush with death?",
+                    "In 2006, you bet billions of dollars putting CUDA into every single GeForce gaming card, causing NVIDIA's profit margins and stock to crater for years. Where did you find the personal conviction to hold that line against Wall Street?",
+                    "In 2012, AlexNet won the ImageNet competition using two off-the-shelf gaming GPUs. What was the exact moment you realized deep learning was the future of computing?",
+                    "In 2016, you personally drove the first DGX-1 supercomputer to OpenAI's office in San Francisco. What did you foresee in that small non-profit that others missed?"
                 ]},
                 {"category": "Business Strategy", "questions": [
-                    "Tata Group is unique globally because over 65% of Tata Sons is owned by charitable trusts. How does that ownership structure change your time horizon compared to Wall Street quarterly capitalism?",
-                    "When you acquired Corus Steel for $12B and JLR for $2.3B, critics claimed an Indian company had overextended itself. What gave you conviction in the turnaround?",
-                    "How do you evaluate whether a failing business unit deserves patient capital and restructuring, or whether it must be shut down?",
-                    "What is the Tata Code of Conduct, and why has the group walked away from multi-billion dollar contracts rather than pay bribes?",
-                    "How do you preserve unity and common culture across 100+ distinct operating companies ranging from software (TCS) to tea (Tetley) to steel?"
+                    "NVIDIA is not just a chip company; it's a full-stack platform consisting of chips, networking (Mellanox), CUDA software, and AI libraries. Why can competitors with fast silicon still not break your moat?",
+                    "Every major cloud hyperscaler—Google, Amazon, Microsoft, Meta—is building custom silicon (TPUs, Trainium, Maia). Why will they continue buying tens of billions of dollars of NVIDIA GPUs?",
+                    "You acquired Mellanox for $6.9 billion in 2019 when many questioned the price. How did networking become the bottleneck of modern AI training clusters?",
+                    "How do you evaluate capital allocation when developing a new chip generation like Blackwell costs billions of dollars years before customers write purchase orders?",
+                    "Why do you believe commodity CPUs and Moore's Law have fundamentally hit a thermal and architectural wall?"
                 ]},
                 {"category": "Startup & Bootstrapping", "questions": [
-                    "In your later years, you actively angel-invested in dozens of Indian startups like Ola, Paytm, and Lenskart. What did you look for in early founders before writing a check?",
-                    "Do you believe the modern venture capital obsession with burning money on customer acquisition destroys the moral foundation of a business?",
-                    "What is your advice to young founders who are tempted to cut ethical corners in the name of speed and growth?",
-                    "How can early-stage startups build high-trust brands in emerging markets where consumers are naturally cynical?",
-                    "What was the single most impressive presentation a 20-something founder ever gave you in your Colaba living room?"
+                    "You have stated that great companies are built by pursuing 'zero-billion-dollar markets' rather than stealing share in existing ones. How does a founder identify a zero-billion-dollar market?",
+                    "What is your advice to early-stage founders building AI applications who fear being steamrolled by OpenAI or Google tomorrow?",
+                    "Why do you say that 'pain and suffering' are the most critical ingredients for high performance in an entrepreneurial career?",
+                    "How did you recruit elite semiconductor engineers in the 1990s when you had no brand and almost no cash?",
+                    "What was the single most difficult pivot you had to convince your engineering team to make?"
                 ]},
                 {"category": "Leadership & Culture", "questions": [
-                    "During the 26/11 terror attacks at the Taj Hotel, Tata staff risked their lives to protect guests, and not a single employee abandoned their post. Where does that level of institutional loyalty come from?",
-                    "How do you deliver harsh decisions, like retiring senior executives or shutting down an unprofitable plant, while preserving dignity?",
-                    "What was your personal ritual for managing intense emotional and legal stress during high-profile corporate battles?",
-                    "Why did you always insist that corporate social responsibility is not charity, but a fundamental cost of doing business?",
-                    "What is the single most important leadership virtue that cannot be taught in business school?"
+                    "You have over 50 direct reports and do not conduct formal 1-on-1 reviews, preferring open public discussions. Why do you believe traditional corporate hierarchy is toxic to speed?",
+                    "You frequently tell your employees that NVIDIA is always 'thirty days from going out of business.' How do you balance healthy paranoia with preventing team burnout?",
+                    "How do you deliver intense, unvarnished critical feedback to senior vice presidents in front of their peers without destroying trust?",
+                    "NVIDIA has one of the lowest employee turnover rates in the technology sector. Why do engineers stay at NVIDIA for 15 to 25 years?",
+                    "What is your daily routine from the moment you wake up to the moment you sleep that enables you to maintain this pace for 31 years?"
                 ]},
                 {"category": "Technology & AI", "questions": [
-                    "Tata Consultancy Services (TCS) became the bedrock of India's IT revolution. How did you view software in the early 1990s when India was still viewed purely as an agricultural economy?",
-                    "How should modern Indian industry balance automated robotics and AI with the imperative to create mass employment for millions of young citizens?",
-                    "What was your dream for India's domestic manufacturing ecosystem when you envisioned the Nano and indigenized automotive components?",
-                    "How can private enterprise partner with public institutions to bring advanced cancer research and genomics to the poorest rural villages?",
-                    "What technological advancement in the 21st century excited you the most as an engineer?"
+                    "Blackwell integrates 208 billion transistors across two dies operating as a single unified GPU. What was the greatest thermodynamic challenge your team had to overcome?",
+                    "Where do you see the trajectory of AI reasoning and test-time compute (like OpenAI o1) impacting the demand for inference clusters?",
+                    "Why do you believe that AI will transform every data center in the world from a cost center into an 'AI factory' producing tokens?",
+                    "What role will liquid cooling play in the next decade of data center architecture as rack density exceeds 100 kilowatts?",
+                    "How far away are we from humanoid robots powered by physical AI operating safely alongside humans in manufacturing and homes?"
                 ]},
                 {"category": "Future Trends", "questions": [
-                    "Where do you see India's industrial positioning over the next 30 years as global supply chains decouple from China?",
-                    "Will traditional family-led conglomerates continue to dominate emerging economies, or will specialized technology giants replace them?",
-                    "How can modern corporations help bridge the widening wealth inequality gap in developing nations?",
-                    "What is the role of Indian industry in environmental sustainability and clean mobility?",
-                    "What gives you the greatest hope when you interact with young Indian students and innovators today?"
+                    "What is 'Sovereign AI,' and why are nations like India, Japan, and the UAE investing billions to build domestic compute clusters?",
+                    "Will synthetic data generated inside physics-accurate simulations (Omniverse) solve the impending exhaustion of human internet training data?",
+                    "How will quantum computing interact with accelerated classical computing over the next 20 years?",
+                    "If token generation costs drop by 100x over the next five years, what new industries will emerge that are mathematically impossible today?",
+                    "What gives you the highest conviction that the world will consume 10x more compute in 2030 than it does today?"
                 ]},
                 {"category": "Rapid Fire", "questions": [
-                    "Shop floor or boardroom?",
-                    "Calculated risk or safe consolidation?",
-                    "Piloting a jet or walking along the beach with your dogs?",
-                    "One word that defines the Tata legacy?",
-                    "The greatest virtue a human being can cultivate?"
+                    "Denny's booth or Stanford lecture hall?",
+                    "Single monolithic die or advanced multi-die packaging?",
+                    "The single greatest chip architecture ever designed?",
+                    "One word that defines NVIDIA's core soul?",
+                    "Leather jacket: how many do you actually own in your closet?"
                 ]},
                 {"category": "Deep & Philosophical", "questions": [
-                    "You chose to never marry and lived a solitary personal life dedicated to the group and philanthropy. Did you ever feel profound loneliness at the top?",
-                    "When everything is stripped away—titles, billions, boardrooms—what does a successful life look like to Ratan Tata?",
-                    "What is a truth about human nature that you only learned after you acquired immense power and influence?",
-                    "How would you like to be remembered by the ordinary citizens of India?",
-                    "If you could relive any single day from your 86 years on earth, which day would you choose?"
+                    "You've been CEO of NVIDIA for over 31 years—longer than almost any tech founder in history. What keeps you waking up at 5 AM with the exact same hunger as in 1993?",
+                    "When your net worth crossed $100 billion, did anything in your internal relationship with work and family change?",
+                    "You've said that children shouldn't be told to learn coding, but rather to learn deep domain expertise because AI will code. What should parents teach their kids today?",
+                    "What is a personal regret or sacrifice you made during the early decades of NVIDIA that still weighs on your mind?",
+                    "When people look back at the AI revolution a century from now, what do you hope history writes about Jensen Huang?"
                 ]},
                 {"category": "Contrarian & Controversial", "questions": [
-                    "Why have you openly criticized the practice of corporate leaders using company aircraft and assets as personal vanity trophies?",
-                    "Do you believe modern corporate governance regulations have become too legalistic, stifling the intuitive, high-trust leadership of great chairmen?",
-                    "What is the most painful lesson you learned from the public feud with Cyrus Mistry in 2016?",
-                    "Why do you believe that unbridled greed and crony capitalism will ultimately destroy a society if business loses its moral compass?",
-                    "What is an unpopular truth about Indian business that leaders refuse to state publicly?"
+                    "Critics argue that the $1 trillion AI infrastructure buildout is an unsustainable bubble with insufficient application revenue. Why are the skeptics wrong?",
+                    "Why do you disagree with tech leaders who advocate for government licensing and pausing frontier AI development?",
+                    "How do you navigate geopolitical export restrictions and tensions between the United States and China regarding advanced chip technologies?",
+                    "Why do you believe traditional computer programming is dead and prompt engineering/natural language is the permanent interface?",
+                    "What is an uncomfortable truth about Silicon Valley's venture ecosystem that prominent investors won't admit?"
                 ]}
             ]
         }

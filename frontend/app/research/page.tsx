@@ -20,13 +20,13 @@ export default function GuestResearch() {
   const presets = [
     { name: "Narendra Modi", company: "Prime Minister of India", site: "https://narendramodi.in" },
     { name: "Nikhil Kamath", company: "Zerodha", site: "https://zerodha.com" },
-    { name: "Ratan Tata", company: "Tata Sons", site: "https://tata.com" },
+    { name: "Jensen Huang", company: "NVIDIA", site: "https://nvidia.com" },
     { name: "Elon Musk", company: "Tesla & SpaceX", site: "https://x.com/elonmusk" },
     { name: "Virat Kohli", company: "Indian Cricket & One8", site: "https://one8.com" },
     { name: "Kunal Shah", company: "CRED", site: "https://cred.club" },
-    { name: "Raj Shamani", company: "House of X", site: "https://houseofx.in" },
     { name: "Sam Altman", company: "OpenAI", site: "https://openai.com" },
     { name: "Deepinder Goyal", company: "Zomato & Blinkit", site: "https://zomato.com" },
+    { name: "Bhavish Aggarwal", company: "Ola Electric & Krutrim", site: "https://olaelectric.com" },
     { name: "Naval Ravikant", company: "AngelList", site: "https://nav.al" },
   ];
 
