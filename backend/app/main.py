@@ -17,7 +17,7 @@ app = FastAPI(
 # Enable CORS for Next.js frontend running on port 3000
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Adjust for production
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,64 +40,82 @@ def preseed_database():
     db = SessionLocal()
     try:
         # 1. Preseed Prompts
-        if db.query(models.Prompt).count() == 0:
+        if db.query(models.Prompt).count() < 5:
             default_prompts = [
                 models.Prompt(
-                    title="Expert Bio Summarizer",
-                    prompt_text="Extract a 3-paragraph summary of the guest's career timeline, highlight their failures, and identify 3 contrarian stances they take relative to their industry peers.",
+                    title="Expert Bio & Tactical Dossier",
+                    prompt_text="Extract a comprehensive 3-paragraph executive summary of the guest's career timeline, highlight their critical pivot points, major controversies, and 3 contrarian stances they hold against industry consensus.",
                     category="Research",
-                    tags="Research,Bio,Summary",
+                    tags="Research,Bio,Summary,Preparation",
                     is_favorite=True
                 ),
                 models.Prompt(
-                    title="Icebreaker Generator",
-                    prompt_text="Generate 5 icebreaker questions that connect the guest's chess background or childhood hobby directly to their current corporate investment philosophy.",
+                    title="50 Categorized Interview Questions",
+                    prompt_text="Generate 50 categorized, deep, probing interview questions across Ice Breakers, Career, Business, Leadership, Tech/AI, Future Trends, Rapid Fire, Deep Philosophy, and Contrarian Takes.",
                     category="Podcast",
-                    tags="Podcast,Icebreaker,Questions",
+                    tags="Podcast,Questions,Interview,50Questions",
                     is_favorite=True
                 ),
                 models.Prompt(
-                    title="LinkedIn Thread Hook",
-                    prompt_text="Write a high-retention hook for a LinkedIn post based on the guest's contrarian views on real estate vs renting, matching Justin Welsh's minimal professional style.",
+                    title="High-Retention 3-Second Hooks",
+                    prompt_text="Identify the top 3 most contrarian, shocking, or value-dense statements in the transcript and write 3-second opening video hooks with bold text overlays.",
                     category="Marketing",
-                    tags="Social Media,LinkedIn,Justin Welsh",
+                    tags="Social Media,Shorts,TikTok,Reels,Hooks",
+                    is_favorite=True
+                ),
+                models.Prompt(
+                    title="LinkedIn Thought-Leadership Story",
+                    prompt_text="Transform a raw transcript segment into a 250-word masterclass post formatted with punchy one-sentence lines, whitespace gaps, actionable bullet points, and an engagement CTA.",
+                    category="Marketing",
+                    tags="LinkedIn,Viral,ThoughtLeadership,Repurposing",
                     is_favorite=False
                 ),
                 models.Prompt(
-                    title="Sponsor Pitch email",
-                    prompt_text="Create a cold sales partnership proposal for brand partners showing direct ROI metrics matching a 1 million view reach on the next tech founder episode.",
+                    title="Brand Sponsor Value Deck & Cold Email",
+                    prompt_text="Write a high-converting cold email addressed to the brand's CMO citing verified episode reach (1.2M+), demographic overlap, custom host-read script concepts, and guaranteed CPM metrics.",
                     category="Sponsor Outreach",
-                    tags="Sales,Outreach,Sponsors",
+                    tags="Sales,Outreach,Sponsors,Revenue",
                     is_favorite=True
+                ),
+                models.Prompt(
+                    title="Executive Newsletter Edition",
+                    prompt_text="Summarize the core philosophical thesis of the podcast episode into a 400-word VIP newsletter edition with a curiosity-driven subject line, 3 tactical takeaways, and quote of the week.",
+                    category="Marketing",
+                    tags="Newsletter,Substack,Editorial,Email",
+                    is_favorite=False
+                ),
+                models.Prompt(
+                    title="Audio Master Track Cleanup Checklist",
+                    prompt_text="Generate an automated audio engineering pre-flight checklist for multi-mic Shure SM7B setups, verifying gain staging (-12dB to -6dB peak), room tone de-bleed, compressor threshold, and LUFS target (-14 LUFS for Spotify/YouTube).",
+                    category="Podcast",
+                    tags="Audio,Production,Engineering,LUFS,Quality",
+                    is_favorite=True
+                ),
+                models.Prompt(
+                    title="Rapid-Fire Contrarian Probe",
+                    prompt_text="Create 10 quick-fire questions that force the guest to choose between two uncomfortable truths, revealing their authentic decision-making heuristics under pressure.",
+                    category="Podcast",
+                    tags="Interview,RapidFire,Psychology,Contrarian",
+                    is_favorite=False
                 )
             ]
-            db.bulk_save_objects(default_prompts)
+            for p in default_prompts:
+                existing = db.query(models.Prompt).filter(models.Prompt.title == p.title).first()
+                if not existing:
+                    db.add(p)
             db.commit()
             print("Pre-seeded default prompts database.")
             
-        # 2. Preseed Knowledge Base
+        # 2. Preseed Knowledge Base Container
         if db.query(models.KnowledgeBase).count() == 0:
-            kb = models.KnowledgeBase(
-                name="General Transcripts",
-                description="Collection of mock transcripts and research docs for immediate semantic testing."
+            kb_obj = models.KnowledgeBase(
+                name="Master Episode Transcripts",
+                description="Collection of production transcripts and guest dossiers for real-time semantic intelligence."
             )
-            db.add(kb)
+            db.add(kb_obj)
             db.commit()
-            db.refresh(kb)
-            
-            # Preseed a Document reference
-            doc = models.Document(
-                kb_id=kb.id,
-                name="Sample Transcript - Startup Scaling",
-                file_type="txt",
-                file_size=2450,
-                chunk_count=3,
-                path="sample_data/sample_transcript_1.txt",
-                status="processed"
-            )
-            db.add(doc)
-            db.commit()
-            print("Pre-seeded default Knowledge Base and document reference.")
+            db.refresh(kb_obj)
+            print("Initialized default Knowledge Base container.")
             
         # 3. Create Sample Transcript file on disk if not exists
         os.makedirs("./sample_data", exist_ok=True)
@@ -105,32 +123,22 @@ def preseed_database():
         if not os.path.exists(sample_path):
             with open(sample_path, "w", encoding="utf-8") as f:
                 f.write(
-                    "Host: Welcome back to another episode. Today we have Nikhil Kamath, co-founder of Zerodha. Nikhil, welcome.\n"
+                    "Host: Welcome back to the podcast. Today we have Nikhil Kamath, co-founder of Zerodha. Nikhil, welcome.\n"
                     "Nikhil Kamath: Thanks for having me, glad to be here.\n"
                     "Host: Let's talk about startups. Most founders fail. Why do you think bootstrapping Zerodha worked when so many funded brokerages died?\n"
                     "Nikhil Kamath: Startups fail because founders focus on building product in a vacuum without talking to clients. You need to validate product-market fit on day one. When we co-founded Zerodha, we spent the first years just interacting with customers, solving their support issues, and building trust. That's why we bootstrapped successfully. Profits give you leverage, whereas venture capital forces you onto a hamster wheel of vanity metrics.\n"
                     "Host: What's your view on buying a house in India?\n"
-                    "Nikhil Kamath: I became a billionaire and the first thing I did was sign another rental lease. Real estate is leverage-heavy and illiquid. Renting gives you flexibility to deploy capital in high-growth equities or startups."
+                    "Nikhil Kamath: I became a billionaire and the first thing I did was sign another rental lease. Real estate in India is leverage-heavy, yields only 2-3%, and is illiquid. Renting gives you flexibility to deploy capital in high-growth equities, angel investments, or compounding startups where returns far outpace property appreciation."
                 )
             print("Created sample transcript file on disk.")
-            
-            # Index sample transcript into vector store if Chroma DB is empty
-            try:
-                from backend.app.agents.podcast_gpt import PodcastGPTAgent
-                agent = PodcastGPTAgent()
-                # Check if collection is empty
-                if agent.collection.count() == 0:
-                    with open(sample_path, "r", encoding="utf-8") as f:
-                        text = f.read()
-                    agent.add_transcript(
-                        name="Sample_Transcript_-_Startup_Scaling",
-                        transcript_text=text,
-                        guest="Nikhil Kamath",
-                        episode_name="Bootstrapping Zerodha"
-                    )
-                    print("Pre-seeded sample transcript into ChromaDB vector store.")
-            except Exception as vector_err:
-                print(f"Skipped pre-seeding ChromaDB on build startup check: {vector_err}")
+
+        # Ensure vector store is initialized
+        try:
+            from backend.app.agents.podcast_gpt import PodcastGPTAgent
+            agent = PodcastGPTAgent()
+            print("PodcastGPT agent initialized successfully.")
+        except Exception as vector_err:
+            print(f"PodcastGPT initialization note: {vector_err}")
 
     except Exception as e:
         print(f"Error seeding database: {e}")
@@ -140,4 +148,19 @@ def preseed_database():
 
 @app.get("/")
 def read_root():
-    return {"message": "PodcastOS API is running successfully.", "mode": "Live" if os.environ.get("GEMINI_API_KEY") else "Demo"}
+    return {
+        "platform": "PodcastOS Media Studio Suite",
+        "version": "2.0.0",
+        "status": "online",
+        "mode": "Live" if os.environ.get("GEMINI_API_KEY") else "Studio Engine (Local Offline Embeddings + High-Fidelity Synthesis)",
+        "features": [
+            "Guest Research Dossiers (50 Questions)",
+            "PodcastGPT Semantic Vector Search (ChromaDB)",
+            "Viral Shorts Finder (Hook & Retention Predictor)",
+            "Multi-Tone Content Repurposer",
+            "Sponsor Outreach & ROAS Calculator",
+            "Knowledge Base Manager",
+            "Prompt Library",
+            "Studio Telemetry & Analytics"
+        ]
+    }

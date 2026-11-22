@@ -31,3 +31,8 @@ uploads/*
 .DS_Store
 Thumbs.db
 *.log
+
+# Scratch & Test Artifacts
+scratch/
+screenshots/
+tests/screenshots/

@@ -3,9 +3,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
 import "./globals.css";
 
-// SVG Icons Map for extreme stability
+// SVG Icons tailored for studio podcasting
 const Icons = {
   dashboard: (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
@@ -19,7 +20,7 @@ const Icons = {
   ),
   chat: (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 0 0 6-6v-1.5m-6 7.5a6 6 0 0 1-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15a3 3 0 0 1-3-3V4.5a3 3 0 1 1 6 0v7.5a3 3 0 0 1-3 3Z" />
     </svg>
   ),
   shorts: (props: React.SVGProps<SVGSVGElement>) => (
@@ -29,7 +30,7 @@ const Icons = {
   ),
   content: (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M7.217 10.907a2.25 2.25 0 1 0 0 2.186m0-2.186c.18.324.283.696.283 1.093s-.103.77-.283 1.093m0-2.186 9.566-5.314m-9.566 7.5 9.566 5.314m0 0a2.25 2.25 0 1 0 3.935 2.186 2.25 2.25 0 0 0-3.935-2.186Zm0-12.814a2.25 2.25 0 1 0 3.933-2.185 2.25 2.25 0 0 0-3.933 2.185Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10" />
     </svg>
   ),
   sponsors: (props: React.SVGProps<SVGSVGElement>) => (
@@ -39,12 +40,12 @@ const Icons = {
   ),
   kb: (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 0 0 6 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 0 1 6 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 0 1 6-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0 0 18 18a8.967 8.967 0 0 0-6 2.292m0-14.25v14.25" />
     </svg>
   ),
   prompts: (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
     </svg>
   ),
   analytics: (props: React.SVGProps<SVGSVGElement>) => (
@@ -54,58 +55,63 @@ const Icons = {
   ),
   settings: (props: React.SVGProps<SVGSVGElement>) => (
     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" {...props}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.324.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.43l-1.003.828c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.954.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.43l1.004-.827c.292-.24.437-.613.43-.991a6.936 6.936 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z" />
-      <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75" />
     </svg>
   )
 };
 
-const navigation = [
-  { name: "Dashboard", href: "/", icon: Icons.dashboard },
-  { name: "Guest Research", href: "/research", icon: Icons.research },
-  { name: "PodcastGPT Chat", href: "/rajgpt", icon: Icons.chat },
-  { name: "Viral Shorts Finder", href: "/shorts", icon: Icons.shorts },
-  { name: "Content Repurposer", href: "/content", icon: Icons.content },
-  { name: "Sponsor Outreach", href: "/sponsors", icon: Icons.sponsors },
-  { name: "Knowledge Base", href: "/kb", icon: Icons.kb },
-  { name: "AI Prompt Library", href: "/prompts", icon: Icons.prompts },
-  { name: "Analytics Dashboard", href: "/analytics", icon: Icons.analytics },
-  { name: "Settings & Keys", href: "/settings", icon: Icons.settings },
+// Studio Production Navigation (Warm Gold primary domain)
+const studioNav = [
+  { name: "Studio Console", href: "/", icon: Icons.dashboard, isTechnical: false },
+  { name: "Guest Research", href: "/research", icon: Icons.research, isTechnical: false },
+  { name: "Viral Shorts Director", href: "/shorts", icon: Icons.shorts, isTechnical: false },
+  { name: "Content Repurposer", href: "/content", icon: Icons.content, isTechnical: false },
+  { name: "Sponsor Sales", href: "/sponsors", icon: Icons.sponsors, isTechnical: false },
 ];
+
+// Intelligence & Data Navigation (Ice Blue technical domain)
+const intelligenceNav = [
+  { name: "PodcastGPT Intelligence", href: "/rajgpt", icon: Icons.chat, isTechnical: true, badge: "AI" },
+  { name: "Knowledge Base", href: "/kb", icon: Icons.kb, isTechnical: true, badge: "RAG" },
+  { name: "AI Prompt Library", href: "/prompts", icon: Icons.prompts, isTechnical: false },
+  { name: "Studio Analytics", href: "/analytics", icon: Icons.analytics, isTechnical: false },
+  { name: "Settings & Telemetry", href: "/settings", icon: Icons.settings, isTechnical: true },
+];
+
+const allNavigation = [...studioNav, ...intelligenceNav];
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const router = useRouter();
   const [commandPaletteOpen, setCommandPaletteOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [apiOnline, setApiOnline] = useState(true);
   const inputRef = useRef<HTMLInputElement>(null);
 
   // Keyboard shortcut listener
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      // Ctrl+K toggles Command Palette
       if ((e.ctrlKey || e.metaKey) && e.key === "k") {
         e.preventDefault();
         setCommandPaletteOpen((prev) => !prev);
       }
-      
-      // Escape closes Command Palette
       if (e.key === "Escape") {
         setCommandPaletteOpen(false);
       }
-
-      // Quick Nav shortcuts (G then R -> Research, etc.) when not typing in inputs
       if (document.activeElement?.tagName !== "INPUT" && document.activeElement?.tagName !== "TEXTAREA") {
         if (e.key === "g") {
           const listenNext = (nextEvent: KeyboardEvent) => {
             if (nextEvent.key === "r") router.push("/research");
             if (nextEvent.key === "p") router.push("/rajgpt");
-            if (nextEvent.key === "s") router.push("/settings");
+            if (nextEvent.key === "s") router.push("/shorts");
+            if (nextEvent.key === "c") router.push("/content");
+            if (nextEvent.key === "o") router.push("/sponsors");
             if (nextEvent.key === "k") router.push("/kb");
+            if (nextEvent.key === "l") router.push("/prompts");
+            if (nextEvent.key === "a") router.push("/analytics");
             window.removeEventListener("keydown", listenNext);
           };
-          window.addEventListener("keydown", listenNext);
-          setTimeout(() => window.removeEventListener("keydown", listenNext), 1000);
+          window.addEventListener("keydown", listenNext, { once: true });
         }
       }
     };
@@ -113,138 +119,262 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [router]);
 
-  // Focus input when command palette opens
   useEffect(() => {
     if (commandPaletteOpen) {
       setTimeout(() => inputRef.current?.focus(), 50);
-    } else {
-      setSearchQuery("");
     }
   }, [commandPaletteOpen]);
 
-  const filteredCommands = navigation.filter((item) =>
+  // Health check on backend
+  useEffect(() => {
+    fetch("http://localhost:8000/")
+      .then((res) => {
+        if (res.ok) setApiOnline(true);
+      })
+      .catch(() => setApiOnline(false));
+  }, []);
+
+  const filteredNav = allNavigation.filter((item) =>
     item.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
-    <html lang="en" suppressHydrationWarning className="h-full bg-[#030712] text-slate-100 antialiased selection:bg-indigo-500/30">
-      <body className="h-full font-sans" suppressHydrationWarning>
-        <div className="flex h-full min-h-screen">
-          {/* Static Sidebar */}
-          <aside className="hidden md:flex md:w-64 md:flex-col border-r border-white/[0.06] bg-slate-950/40 backdrop-blur-md p-6 space-y-6">
-            <div className="flex items-center space-x-2 pb-4 border-b border-white/[0.06]">
-              <div className="h-8 w-8 rounded-lg bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center font-bold text-white shadow-lg shadow-indigo-500/20">
-                P
-              </div>
-              <span className="text-lg font-semibold text-white tracking-tight">PodcastOS</span>
-            </div>
-            
-            <nav className="flex-1 space-y-1">
-              {navigation.map((item) => {
-                const isActive = pathname === item.href;
-                return (
-                  <Link
-                    key={item.name}
-                    href={item.href}
-                    className={`flex items-center space-x-3 px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-                      isActive
-                        ? "bg-indigo-600/15 text-indigo-400 border-l-2 border-indigo-500"
-                        : "text-slate-400 hover:bg-white/[0.03] hover:text-white"
-                    }`}
-                  >
-                    <item.icon className="h-5 w-5 shrink-0" />
-                    <span>{item.name}</span>
-                  </Link>
-                );
-              })}
-            </nav>
-
-            <div className="pt-4 border-t border-white/[0.06] text-xs text-slate-500 space-y-2">
-              <div className="flex items-center justify-between">
-                <span>API Status</span>
-                <span className="inline-flex h-2 w-2 rounded-full bg-emerald-500"></span>
-              </div>
-              <div className="text-[10px] text-slate-600 leading-normal">
-                Press <kbd className="rounded border border-slate-800 bg-slate-900 px-1 py-0.2">Ctrl+K</kbd> to search everything
+    <html lang="en">
+      <head>
+        <title>PodcastOS — The Production Studio Operating System</title>
+        <meta name="description" content="High-end creative studio × broadcast control room × premium AI software." />
+      </head>
+      <body className="flex h-screen overflow-hidden antialiased selection:bg-amber-500/30 selection:text-amber-200">
+        {/* Left Studio Operating System Sidebar */}
+        <aside className="w-64 border-r border-white/[0.06] bg-[#0E0B09]/95 flex flex-col justify-between hidden md:flex z-20 backdrop-blur-md">
+          <div className="flex flex-col h-full">
+            {/* Studio Header Brand */}
+            <div className="h-20 border-b border-white/[0.06] px-5 flex items-center justify-between">
+              <Link href="/" className="flex items-center space-x-3 group">
+                <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-amber-500 to-amber-700 flex items-center justify-center shadow-lg shadow-black/80 border border-amber-400/30 group-hover:scale-105 transition-transform">
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-50" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M12 2a4 4 0 0 0-4 4v6a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4Zm6.5 10a.75.75 0 0 0-1.5 0 5 5 0 0 1-10 0 .75.75 0 0 0-1.5 0 6.5 6.5 0 0 0 6 6.45V20.5H9a.75.75 0 0 0 0 1.5h6a.75.75 0 0 0 0-1.5h-2.5v-2.05A6.5 6.5 0 0 0 18.5 12Z" />
+                  </svg>
+                </div>
+                <div>
+                  <div className="font-heading tracking-wide text-base font-bold text-[#FAF7F2] flex items-center gap-1.5">
+                    Podcast<span className="text-amber-400">OS</span>
+                  </div>
+                  <div className="text-[10px] tracking-widest uppercase text-amber-300/70 font-mono font-medium">
+                    Studio Suite
+                  </div>
+                </div>
+              </Link>
+              
+              {/* ON AIR Badge */}
+              <div className="flex items-center space-x-1.5 px-2.5 py-1 rounded-full bg-red-950/40 border border-red-500/25">
+                <span className="h-2 w-2 rounded-full bg-red-500 on-air-active"></span>
+                <span className="text-[9px] font-mono font-bold tracking-wider text-red-300">ON AIR</span>
               </div>
             </div>
-          </aside>
 
-          {/* Main Content Area */}
-          <div className="flex flex-1 flex-col overflow-y-auto">
-            {/* Top Bar for Mobile */}
-            <header className="flex h-16 shrink-0 items-center justify-between border-b border-white/[0.06] px-6 md:hidden bg-slate-950/20 backdrop-blur-md">
-              <div className="flex items-center space-x-2">
-                <div className="h-7 w-7 rounded bg-indigo-600 flex items-center justify-center font-bold text-white text-xs">P</div>
-                <span className="font-semibold text-white">PodcastOS</span>
+            {/* Navigation Menu */}
+            <div className="flex-1 overflow-y-auto px-3 py-4 space-y-5">
+              {/* Group 1: Studio Production */}
+              <div className="space-y-1">
+                <div className="px-3 pb-1.5 text-[10px] font-semibold tracking-widest text-[#7E6F63] uppercase font-mono">
+                  Studio Production
+                </div>
+                {studioNav.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={`relative flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                        isActive
+                          ? "text-[#FAF7F2] font-semibold bg-white/[0.04] border border-white/[0.06] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)]"
+                          : "text-[#9E9084] hover:text-[#FAF7F2] hover:bg-white/[0.03]"
+                      }`}
+                    >
+                      {isActive && (
+                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#E5A93C] shadow-[0_0_8px_rgba(229,169,60,0.6)]" />
+                      )}
+                      <item.icon className={`h-4 w-4 relative z-10 transition-colors ${isActive ? "text-amber-400" : "text-[#7E6F63]"}`} />
+                      <span className="truncate relative z-10">{item.name}</span>
+                    </Link>
+                  );
+                })}
               </div>
+
+              {/* Group 2: Intelligence & System */}
+              <div className="space-y-1">
+                <div className="px-3 pb-1.5 text-[10px] font-semibold tracking-widest text-[#7E6F63] uppercase font-mono flex items-center justify-between">
+                  <span>Intelligence & System</span>
+                  <span className="h-1 w-1 rounded-full bg-[#7DD3FC]/50"></span>
+                </div>
+                {intelligenceNav.map((item) => {
+                  const isActive = pathname === item.href;
+                  return (
+                    <Link
+                      key={item.name}
+                      href={item.href}
+                      className={`relative flex items-center space-x-3 px-3 py-2.5 rounded-xl text-xs font-medium transition-all ${
+                        isActive
+                          ? "text-[#FAF7F2] font-semibold bg-[#7DD3FC]/[0.06] border border-[#7DD3FC]/25 shadow-[inset_0_1px_0_rgba(125,211,252,0.12)]"
+                          : "text-[#9E9084] hover:text-[#FAF7F2] hover:bg-white/[0.03]"
+                      }`}
+                    >
+                      {isActive && (
+                        <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-[#7DD3FC] shadow-[0_0_8px_rgba(125,211,252,0.7)]" />
+                      )}
+                      <item.icon className={`h-4 w-4 relative z-10 transition-colors ${isActive ? "text-[#7DD3FC]" : "text-[#7E6F63]"}`} />
+                      <span className="truncate relative z-10">{item.name}</span>
+                      {item.badge && (
+                        <span className={`ml-auto relative z-10 text-[9px] font-mono px-1.5 py-0.5 rounded border ${
+                          isActive
+                            ? "border-[#7DD3FC]/40 bg-[#7DD3FC]/15 text-[#7DD3FC] font-bold"
+                            : "border-[#7DD3FC]/20 bg-[#7DD3FC]/5 text-[#7DD3FC]/80 font-medium"
+                        }`}>
+                          {item.badge}
+                        </span>
+                      )}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+
+            {/* Bottom Status Dock */}
+            <div className="p-3 border-t border-white/[0.06] bg-[#0A0807]/90 space-y-2">
+              {/* Broadcast VU Meter Simulation */}
+              <div className="px-2.5 py-2 rounded-xl bg-[#14100E] border border-white/[0.06] flex items-center justify-between">
+                <span className="text-[10px] font-mono text-[#8C7B6E]">VU Meter (L/R)</span>
+                <div className="flex items-end space-x-0.5 h-3.5">
+                  <span className="w-1 bg-emerald-500 rounded-sm soundwave-bar-1"></span>
+                  <span className="w-1 bg-emerald-400 rounded-sm soundwave-bar-2"></span>
+                  <span className="w-1 bg-amber-400 rounded-sm soundwave-bar-3"></span>
+                  <span className="w-1 bg-emerald-400 rounded-sm soundwave-bar-4"></span>
+                  <span className="w-1 bg-red-400 rounded-sm soundwave-bar-5"></span>
+                </div>
+              </div>
+
+              {/* Status Indicator & Search Palette Hint */}
+              <div className="flex items-center justify-between px-2 pt-1">
+                <div className="flex items-center space-x-2">
+                  <span className={`h-1.5 w-1.5 rounded-full ${apiOnline ? "bg-emerald-400" : "bg-amber-400 animate-pulse"}`}></span>
+                  <span className="text-[11px] text-[#A8988B] font-mono">{apiOnline ? "Core Live" : "Offline"}</span>
+                </div>
+                <button
+                  onClick={() => setCommandPaletteOpen(true)}
+                  className="inline-flex items-center space-x-1 text-[10px] font-mono px-2 py-0.5 rounded-lg bg-[#181310] text-[#B8A99A] hover:text-amber-300 border border-white/[0.06] transition-colors"
+                >
+                  <span>Ctrl+K</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </aside>
+
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0 overflow-hidden bg-transparent">
+          {/* Top Bar with Studio Ambience */}
+          <header className="h-16 border-b border-white/[0.06] bg-[#0E0B09]/90 backdrop-blur-md px-6 flex items-center justify-between z-10">
+            <div className="flex items-center space-x-4">
+              <span className="font-heading text-sm font-bold text-[#FAF7F2] hidden sm:inline tracking-wide">
+                PodcastOS Media Studio
+              </span>
+              <div className="h-4 w-px bg-white/[0.08] hidden sm:inline"></div>
+              <span className="text-xs text-[#9E9084] hidden md:inline">
+                Automated Guest Dossiers • Semantic Transcripts • Viral Hooks • Sponsor Sales
+              </span>
+              <div className="h-4 w-px bg-white/[0.08] hidden xl:inline"></div>
+              
+              {/* ChromaDB Vector Telemetry Pill */}
+              <div className="hidden xl:flex items-center space-x-2 px-3 py-1 rounded-full bg-[#0E2A3C]/40 border border-[#7DD3FC]/25 text-[10px] font-mono text-ice">
+                <span className="h-1.5 w-1.5 rounded-full ice-dot"></span>
+                <span className="font-semibold">ChromaDB Vector: Sync</span>
+                <span className="text-ice-muted font-normal">(&lt; 380ms)</span>
+              </div>
+            </div>
+
+            <div className="flex items-center space-x-3">
+              {/* Quick Search Button */}
               <button
                 onClick={() => setCommandPaletteOpen(true)}
-                className="rounded-lg border border-white/[0.08] bg-slate-900/40 p-2 text-slate-400 hover:text-white"
+                className="inline-flex items-center space-x-2 px-3 py-1.5 rounded-xl bg-[#181310] hover:bg-[#201915] border border-white/[0.08] hover:border-amber-500/30 text-xs text-[#B8A99A] hover:text-[#FAF7F2] transition-all"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
+                <span>Command Menu</span>
+                <kbd className="hidden sm:inline-block px-1.5 py-0.5 text-[10px] font-mono bg-[#110E0C] text-amber-300/80 rounded border border-white/[0.06]">
+                  ⌘K
+                </kbd>
               </button>
-            </header>
 
-            {/* Inner Dashboard Page Content */}
-            <main className="flex-1 p-6 md:p-8 max-w-7xl w-full mx-auto pb-16">
-              {children}
-            </main>
+              <Link
+                href="/research"
+                className="btn-primary px-3.5 py-1.5 rounded-xl text-xs font-semibold inline-flex items-center space-x-1.5 shadow-sm"
+              >
+                <span>+ Research Guest</span>
+              </Link>
+            </div>
+          </header>
 
-            {/* Footer Disclaimer */}
-            <footer className="py-6 px-8 border-t border-white/[0.04] bg-slate-950/20 text-center text-xs text-slate-500">
-              <p>PodcastOS is an independent portfolio project inspired by modern podcast production workflows.</p>
-              <p className="mt-1 text-[10px] text-slate-600">It is not affiliated with Figuring Out Media or Raj Shamani.</p>
-            </footer>
-          </div>
+          {/* Page Body with Smooth Route Transitions */}
+          <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 py-6">
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={pathname}
+                initial={{ opacity: 0, y: 10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -6 }}
+                transition={{ duration: 0.22, ease: [0.16, 1, 0.3, 1] }}
+                className="max-w-7xl mx-auto"
+              >
+                {children}
+              </motion.div>
+            </AnimatePresence>
+          </main>
         </div>
 
         {/* Command Palette Modal */}
         {commandPaletteOpen && (
-          <div className="fixed inset-0 z-50 flex items-start justify-center pt-[15vh] px-4">
-            {/* Backdrop */}
-            <div className="fixed inset-0 bg-slate-950/80 backdrop-blur-sm" onClick={() => setCommandPaletteOpen(false)}></div>
-            
-            {/* Palette Panel */}
-            <div className="relative w-full max-w-lg overflow-hidden rounded-xl border border-white/[0.08] bg-[#0c0f17] shadow-2xl flex flex-col">
-              <div className="flex items-center space-x-3 px-4 border-b border-white/[0.06]">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5 text-slate-400">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+          <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 px-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-150">
+            <div className="w-full max-w-xl rounded-2xl glass-card border border-white/[0.1] overflow-hidden shadow-2xl shadow-black/90">
+              <div className="p-4 border-b border-white/[0.08] flex items-center space-x-3 bg-[#14100E]">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-amber-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
                 </svg>
                 <input
                   ref={inputRef}
                   type="text"
-                  placeholder="Search pages, commands, settings..."
+                  placeholder="Jump to studio section, agent, or shortcut..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full py-4 text-sm bg-transparent border-0 text-white placeholder-slate-500 focus:outline-none"
+                  className="w-full bg-transparent text-sm text-[#FAF7F2] placeholder-[#7E6F63] focus:outline-none"
                 />
+                <button
+                  onClick={() => setCommandPaletteOpen(false)}
+                  className="text-xs text-[#8C7B6E] hover:text-[#FAF7F2] px-2 py-1 rounded-lg bg-[#1D1714] border border-white/[0.06]"
+                >
+                  ESC
+                </button>
               </div>
 
-              <div className="max-h-72 overflow-y-auto p-2">
-                {filteredCommands.length > 0 ? (
-                  filteredCommands.map((cmd) => (
-                    <button
-                      key={cmd.name}
-                      onClick={() => {
-                        router.push(cmd.href);
-                        setCommandPaletteOpen(false);
-                      }}
-                      className="w-full flex items-center space-x-3 px-3 py-2.5 rounded-lg text-left text-sm text-slate-300 hover:bg-indigo-600 hover:text-white transition-all group"
-                    >
-                      <cmd.icon className="h-5 w-5 text-slate-500 group-hover:text-white" />
-                      <span>{cmd.name}</span>
-                    </button>
-                  ))
-                ) : (
-                  <div className="py-8 text-center text-sm text-slate-500">No results found for &quot;{searchQuery}&quot;</div>
-                )}
-              </div>
-              <div className="bg-slate-950/60 px-4 py-2 border-t border-white/[0.04] text-[10px] text-slate-600 flex justify-between">
-                <span>Use arrows to navigate, Esc to close</span>
-                <span>Select with Enter</span>
+              <div className="max-h-80 overflow-y-auto p-2 space-y-1 bg-[#100D0B]">
+                {filteredNav.map((item) => (
+                  <button
+                    key={item.name}
+                    onClick={() => {
+                      router.push(item.href);
+                      setCommandPaletteOpen(false);
+                    }}
+                    className="w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-left text-xs text-[#C7B9AC] hover:text-[#FAF7F2] hover:bg-white/[0.04] transition-colors"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <item.icon className={`h-4 w-4 ${item.isTechnical ? "text-[#7DD3FC]" : "text-amber-400"}`} />
+                      <span>{item.name}</span>
+                    </div>
+                    <span className="text-[10px] font-mono text-[#7E6F63]">{item.href}</span>
+                  </button>
+                ))}
               </div>
             </div>
           </div>

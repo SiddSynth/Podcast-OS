@@ -22,10 +22,43 @@ class WebSearchTool(BaseSearchTool):
             except Exception as e:
                 print(f"Error calling Tavily Search: {e}")
 
-        # Fallback to local mock results or basic web queries (simple duckduckgo scraping if possible, or structured mock)
+        # Fallback to live public Wikipedia knowledge or local structured results
         return self._get_mock_search_results(query)
 
     def _get_mock_search_results(self, query: str) -> List[Dict[str, Any]]:
+        # 1. Try live Wikipedia search (free, public API, no key required)
+        try:
+            clean_q = query.replace("None", "").replace("Unknown", "").replace("background", "").replace("career", "").replace("news", "").replace("biography", "").strip()
+            headers = {"User-Agent": "PodcastOS/2.0 (editorial-research)"}
+            r = requests.get(
+                "https://en.wikipedia.org/w/api.php",
+                params={
+                    "action": "query",
+                    "list": "search",
+                    "srsearch": clean_q or query,
+                    "format": "json"
+                },
+                headers=headers,
+                timeout=4
+            )
+            if r.status_code == 200:
+                search_data = r.json().get("query", {}).get("search", [])
+                if search_data:
+                    live_results = []
+                    for item in search_data[:4]:
+                        title = item.get("title", "")
+                        snippet = BeautifulSoup(item.get("snippet", ""), "html.parser").get_text()
+                        link = f"https://en.wikipedia.org/wiki/{title.replace(' ', '_')}"
+                        live_results.append({
+                            "title": title,
+                            "link": link,
+                            "snippet": snippet
+                        })
+                    if live_results:
+                        return live_results
+        except Exception as e:
+            print(f"Wikipedia live search fallback error: {e}")
+
         query_lower = query.lower()
         if "nikhil kamath" in query_lower:
             return [
@@ -61,9 +94,9 @@ class WebSearchTool(BaseSearchTool):
         elif "shridhar" in query_lower or "shreedhar" in query_lower or "shamani" in query_lower:
             return [
                 {
-                    "title": "Raj Shamani - Founder of Figuring Out Media",
+                    "title": "Raj Shamani - Entrepreneur & Keynote Speaker",
                     "link": "https://rajshamani.com",
-                    "snippet": "Raj Shamani is an entrepreneur, public speaker, and host of Figuring Out Podcast, India's fastest-growing business podcast."
+                    "snippet": "Raj Shamani is an entrepreneur, public speaker, and host of top business and personal development podcasts."
                 }
             ]
         

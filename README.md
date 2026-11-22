@@ -2,10 +2,10 @@
 
 ### The Production-Quality AI Operating System for Modern Podcast Teams
 
-PodcastOS is a modular, high-fidelity AI-driven platform designed to automate guest research, question preparation, transcript search, viral clip detection, and sponsor outreach. Inspired by the workflows of world-class production houses like **Figuring Out Media**, it provides a streamlined internal OS experience for media executives and content managers.
+PodcastOS is a modular, high-fidelity AI-driven platform designed to automate guest research, question preparation, transcript search, viral clip detection, and sponsor outreach. Engineered for world-class media production houses and studios, it provides a streamlined internal OS experience for media executives, creators, and showrunners.
 
 > [!NOTE]
-> **Legal Disclaimer:** PodcastOS is an independent portfolio project. It is not officially affiliated with, endorsed by, or partnered with Figuring Out Media, Raj Shamani, or their respective brands.
+> **Production Notice:** PodcastOS is a universal operating system for podcast studios, creator networks, and media companies globally.
 
 ---
 

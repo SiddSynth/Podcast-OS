@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from backend.app.database import get_db
 from backend.app import models, schemas
 
@@ -27,16 +27,10 @@ def get_analytics_dashboard_summary(db: Session = Depends(get_db)):
     guests = db.query(models.Guest.name, func.count(models.ResearchReport.id).label("cnt")) \
         .join(models.ResearchReport, models.ResearchReport.guest_id == models.Guest.id) \
         .group_by(models.Guest.name) \
-        .order_by(func.desc("cnt")) \
+        .order_by(desc("cnt")) \
         .limit(5).all()
         
     most_searched_guests = [{"name": g[0], "count": g[1]} for g in guests]
-    if not most_searched_guests:
-        most_searched_guests = [
-            {"name": "Nikhil Kamath", "count": 12},
-            {"name": "Kunal Shah", "count": 8},
-            {"name": "Bhavish Aggarwal", "count": 5}
-        ]
         
     # 7. Top queries (from semantic search logs in analytics metadata)
     top_queries_db = db.query(models.AnalyticsEntry.meta_data) \
@@ -48,23 +42,15 @@ def get_analytics_dashboard_summary(db: Session = Depends(get_db)):
     for item in top_queries_db:
         if item[0] and "query" in item[0]:
             top_queries.append({"query": item[0]["query"], "count": 1})
-            
-    if not top_queries:
-        top_queries = [
-            {"query": "What did Nikhil Kamath say about startups?", "count": 15},
-            {"query": "Kunal Shah on Indian customer psychology", "count": 10},
-            {"query": "bootstrapping a financial company", "count": 6},
-            {"query": "viral hooks for LinkedIn", "count": 4}
-        ]
         
     return schemas.AnalyticsSummary(
-        total_research=total_research if total_research > 0 else 24,
-        total_questions=total_questions if total_questions > 0 else 18,
-        total_documents=total_documents if total_documents > 0 else 32,
-        total_indexed_podcasts=total_indexed_podcasts if total_indexed_podcasts > 0 else 12,
-        token_usage=int(total_tokens) if total_tokens > 0 else 485000,
-        estimated_api_cost=float(total_cost) if total_cost > 0 else 1.24,
-        avg_latency_ms=round(float(avg_latency), 2) if avg_latency > 0 else 1250.0,
+        total_research=total_research,
+        total_questions=total_questions,
+        total_documents=total_documents,
+        total_indexed_podcasts=total_indexed_podcasts,
+        token_usage=int(total_tokens),
+        estimated_api_cost=round(float(total_cost), 4),
+        avg_latency_ms=round(float(avg_latency), 2),
         most_searched_guests=most_searched_guests,
         top_queries=top_queries
     )

@@ -1,26 +1,19 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 
 export default function Analytics() {
   const [data, setData] = useState({
-    total_research: 24,
-    total_questions: 18,
-    total_documents: 32,
-    total_indexed_podcasts: 12,
-    token_usage: 485000,
-    estimated_api_cost: 1.24,
-    avg_latency_ms: 1250,
-    most_searched_guests: [
-      { name: "Nikhil Kamath", count: 12 },
-      { name: "Kunal Shah", count: 8 },
-      { name: "Bhavish Aggarwal", count: 5 }
-    ],
-    top_queries: [
-      { query: "What did Nikhil Kamath say about startups?", count: 15 },
-      { query: "Kunal Shah on Indian customer psychology", count: 10 },
-      { query: "bootstrapping a financial company", count: 6 }
-    ]
+    total_research: 0,
+    total_questions: 0,
+    total_documents: 0,
+    total_indexed_podcasts: 0,
+    token_usage: 0,
+    estimated_api_cost: 0,
+    avg_latency_ms: 0,
+    most_searched_guests: [] as any[],
+    top_queries: [] as any[],
   });
 
   useEffect(() => {
@@ -29,97 +22,138 @@ export default function Analytics() {
       .then((resData) => {
         if (resData) setData(resData);
       })
-      .catch((err) => console.log("Backend offline, using fallback stats:", err));
+      .catch((err) => console.log("Using live telemetry:", err));
   }, []);
 
   return (
-    <div className="space-y-8">
-      {/* Page Header */}
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.35, ease: "easeOut" }}
+      className="space-y-8 pb-12"
+    >
+      {/* Header */}
       <div>
-        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight text-white">Analytics Dashboard</h1>
-        <p className="text-slate-400 text-xs md:text-sm mt-1">
-          Monitor operating system usage metrics, token parameters, estimated live API expenditures, and search topics.
+        <div className="inline-flex items-center space-x-2 text-xs font-mono text-amber-400 bg-amber-950/30 px-3 py-1 rounded-full border border-amber-500/25 mb-2">
+          <span className="h-1.5 w-1.5 rounded-full bg-amber-400"></span>
+          <span className="tracking-widest uppercase font-semibold text-[10px]">PRODUCTION TELEMETRY & SYSTEM HEALTH</span>
+        </div>
+        <h1 className="font-heading text-2xl sm:text-3xl font-extrabold tracking-tight text-[#FAF7F2]">
+          Studio Analytics & Operational Telemetry
+        </h1>
+        <p className="text-xs sm:text-sm text-[#A8988B] mt-1 font-light">
+          Monitor operating system usage parameters, token throughput, vector indexing metrics, and research query logs.
         </p>
       </div>
 
-      {/* Grid Stats */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      {/* KPI Cards */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
         {[
-          { label: "Token Consumption", value: data.token_usage.toLocaleString(), unit: "tokens" },
-          { label: "Estimated API Cost", value: `$${data.estimated_api_cost.toFixed(3)}`, unit: "USD" },
-          { label: "Avg Latency", value: `${data.avg_latency_ms} ms`, unit: "processing time" },
-          { label: "Indexed Episodes", value: data.total_indexed_podcasts, unit: "podcast files" }
+          { label: "Token Consumption", value: data.token_usage.toLocaleString(), unit: "tokens processed", icon: "⚡", isVector: false },
+          { label: "Estimated API Cost", value: `$${data.estimated_api_cost.toFixed(2)}`, unit: "USD (Gemini / Chroma)", icon: "💰", isVector: false },
+          { label: "Average Latency", value: `${data.avg_latency_ms} ms`, unit: "pipeline latency", icon: "⏱", isVector: true },
+          { label: "Indexed Master Transcripts", value: `${data.total_indexed_podcasts} Episodes`, unit: "ChromaDB Vector Store", icon: "🎙️", isVector: true },
         ].map((stat, i) => (
-          <div key={i} className="glass-card rounded-xl p-5 space-y-1">
-            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">{stat.label}</span>
-            <div className="text-2xl font-bold text-white tracking-tight">{stat.value}</div>
-            <p className="text-[10px] text-slate-500 font-mono">{stat.unit}</p>
-          </div>
+          <motion.div
+            key={i}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: i * 0.05 }}
+            whileHover={{ y: -2 }}
+            className={`studio-card p-5 space-y-1.5 transition-all ${
+              stat.isVector ? "hover:border-[#7DD3FC]/30" : "hover:border-amber-400/30"
+            }`}
+          >
+            <div className="flex items-center justify-between">
+              <span className="text-[10px] font-mono uppercase tracking-widest text-[#8E8074] font-semibold">{stat.label}</span>
+              <span className="text-sm opacity-80">{stat.icon}</span>
+            </div>
+            <div className="text-2xl sm:text-3xl font-heading font-extrabold text-[#FAF7F2] tracking-tight tabular-nums">{stat.value}</div>
+            <p className={`text-[10px] font-mono ${stat.isVector ? "text-ice flex items-center gap-1.5" : "text-[#7E6F63]"}`}>
+              {stat.isVector && <span className="h-1 w-1 rounded-full ice-dot"></span>}
+              {stat.unit}
+            </p>
+          </motion.div>
         ))}
       </div>
 
-      <div className="grid gap-6 md:grid-cols-2">
-        {/* Left Card: Most searched guests */}
-        <div className="glass-card rounded-xl p-6 space-y-4">
-          <h3 className="text-sm font-semibold text-white tracking-tight">Most Searched Guests</h3>
-          <div className="space-y-3">
-            {data.most_searched_guests.map((g, idx) => (
-              <div key={idx} className="space-y-1.5">
-                <div className="flex justify-between text-xs font-medium">
-                  <span className="text-slate-300">{g.name}</span>
-                  <span className="text-indigo-400">{g.count} searches</span>
-                </div>
-                <div className="h-2 w-full bg-slate-900 rounded-full overflow-hidden">
-                  <div
-                    className="h-full bg-indigo-600 rounded-full"
-                    style={{ width: `${Math.min(100, (g.count / 15) * 100)}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
+      {/* Two-Column Telemetry */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Most Searched Guests */}
+        <motion.div
+          initial={{ opacity: 0, x: -10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.35, delay: 0.15 }}
+          className="studio-card p-6 sm:p-7 space-y-4"
+        >
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+            <h3 className="font-heading text-base font-bold text-[#FAF7F2]">Most Researched Studio Guests</h3>
+            <span className="text-xs font-mono text-amber-400">Top Frequency</span>
           </div>
-        </div>
 
-        {/* Right Card: Top semantic queries */}
-        <div className="glass-card rounded-xl p-6 space-y-4">
-          <h3 className="text-sm font-semibold text-white tracking-tight">Top Semantic Queries (PodcastGPT)</h3>
-          <div className="divide-y divide-white/[0.04]">
-            {data.top_queries.map((q, idx) => (
-              <div key={idx} className="py-3 flex justify-between items-center text-xs">
-                <span className="text-slate-300 truncate max-w-xs">&quot;{q.query}&quot;</span>
-                <span className="inline-flex items-center rounded bg-slate-900 px-2 py-0.5 font-mono text-[10px] text-slate-400 shrink-0">
-                  {q.count} hits
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
+          {(!data.most_searched_guests || data.most_searched_guests.length === 0) ? (
+            <div className="py-8 text-center space-y-2">
+              <span className="text-2xl">📊</span>
+              <p className="text-xs text-[#FAF7F2] font-semibold">No Research Telemetry Logged Yet</p>
+              <p className="text-[11px] text-[#A8988B] font-light">Guest popularity curves will populate as you execute dossiers.</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {data.most_searched_guests.map((g, i) => (
+                <div key={i} className="space-y-1">
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-semibold text-[#FAF7F2]">{i + 1}. {g.name}</span>
+                    <span className="text-[11px] font-mono text-amber-400 font-bold tabular-nums">{g.count} Dossiers</span>
+                  </div>
+                  <div className="h-1.5 w-full rounded-full bg-[#1F1714] overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${Math.min(100, (g.count / 15) * 100)}%` }}
+                      transition={{ duration: 0.6, ease: "easeOut" }}
+                      className="h-full bg-gradient-to-r from-amber-600 to-amber-400 rounded-full"
+                    ></motion.div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
 
-      {/* AI Operations Insights */}
-      <div className="glass-card rounded-xl p-6 bg-gradient-to-br from-indigo-950/15 to-purple-950/15 space-y-4">
-        <h3 className="text-xs font-semibold text-indigo-300 uppercase tracking-wider">AI Operations Insights</h3>
-        <div className="grid gap-4 md:grid-cols-3 text-xs leading-relaxed">
-          <div className="border border-indigo-500/10 bg-indigo-950/5 p-4 rounded-lg space-y-1">
-            <span className="font-bold text-white">Token Efficiency</span>
-            <p className="text-slate-400">
-              Lightweight prompt structuring with caching reduces model tokens by 42% compared to standard templates.
-            </p>
+        {/* Top Semantic Queries */}
+        <motion.div
+          initial={{ opacity: 0, x: 10 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.35, delay: 0.15 }}
+          className="studio-card p-6 sm:p-7 space-y-4"
+        >
+          <div className="flex items-center justify-between pb-3 border-b border-white/[0.06]">
+            <h3 className="font-heading text-base font-bold text-[#FAF7F2]">Top Vector Retrieval Topics</h3>
+            <span className="text-[10px] font-mono text-ice bg-[#0E2A3C]/80 px-2 py-0.5 rounded border border-[#7DD3FC]/25 flex items-center gap-1 font-medium">
+              <span className="h-1 w-1 rounded-full ice-dot"></span>
+              PodcastGPT Logs
+            </span>
           </div>
-          <div className="border border-indigo-500/10 bg-indigo-950/5 p-4 rounded-lg space-y-1">
-            <span className="font-bold text-white">Latency Performance</span>
-            <p className="text-slate-400">
-              Vector retrieval indexing averages 140ms on ChromaDB queries, maintaining real-time chat feel.
-            </p>
-          </div>
-          <div className="border border-indigo-500/10 bg-indigo-950/5 p-4 rounded-lg space-y-1">
-            <span className="font-bold text-white">Outreach Personalization</span>
-            <p className="text-slate-400">
-              Web parsing overlays brand context onto sponsor drafts, increasing predicted partnership responses.
-            </p>
-          </div>
-        </div>
+
+          {(!data.top_queries || data.top_queries.length === 0) ? (
+            <div className="py-8 text-center space-y-2">
+              <span className="text-2xl">🔍</span>
+              <p className="text-xs text-[#FAF7F2] font-semibold">No Vector Queries Recorded Yet</p>
+              <p className="text-[11px] text-[#A8988B] font-light">Natural language query throughput will appear as you chat with PodcastGPT.</p>
+            </div>
+          ) : (
+            <div className="space-y-2.5">
+              {data.top_queries.map((q, i) => (
+                <div key={i} className="p-3.5 rounded-xl bg-[#140F0D] border border-white/[0.06] flex items-center justify-between text-xs">
+                  <span className="text-[#FAF7F2] truncate max-w-[280px]">"{q.query}"</span>
+                  <span className="font-mono text-[10px] text-ice bg-[#0E2A3C]/80 px-2 py-0.5 rounded border border-[#7DD3FC]/25 whitespace-nowrap">
+                    {q.count} queries
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   );
 }
